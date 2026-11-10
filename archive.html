@@ -69,11 +69,53 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 .lb .navbtn{position:absolute;top:50%;transform:translateY(-50%);color:#dbe7f2;
   font-size:26px;padding:12px 18px;cursor:pointer;user-select:none}
 .lb .prev{left:12px}.lb .next{right:12px}
+.lb .dsl{display:block;margin-top:10px;font-family:"Kaiti SC",KaiTi,"STKaiti",serif;
+  font-size:16px;letter-spacing:.06em;color:#c0564c;text-shadow:0 0 18px rgba(192,86,76,.32)}
+.lb .dsl b{color:#e07a6e;font-weight:400}
 
 @media(max-width:820px){
   .nav .total{display:none}
   .masonry{gap:6px}.mcol{gap:6px}
 }
+/* 锁定文件夹 */
+.locked{margin:12px 0 0;border:1px solid #141c26;background:#0b0f14;padding:24px 22px;
+  display:flex;align-items:center;gap:16px;cursor:pointer;position:relative;overflow:hidden;
+  transition:border-color .25s}
+.locked:hover{border-color:var(--accent)}
+.locked .lk{width:34px;height:34px;flex:none;border:1px solid #2a3644;display:flex;
+  align-items:center;justify-content:center;color:#5d7186}
+.locked .lk svg{width:16px;height:16px}
+.locked b{font-family:"Songti SC","STSong",serif;font-weight:500;font-size:15px;
+  letter-spacing:.12em;color:#c9d6e2;display:block}
+.locked .sub{font-family:Consolas,monospace;font-size:9px;letter-spacing:.18em;color:#5d7186}
+.locked .go{margin-left:auto;font-size:10px;letter-spacing:.14em;color:var(--accent);
+  opacity:0;transition:.25s;white-space:nowrap}
+.locked:hover .go{opacity:1}
+.locked::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px)}
+
+.gate{position:fixed;inset:0;z-index:95;background:rgba(6,9,13,.86);display:none;
+  align-items:center;justify-content:center;padding:24px}
+.gate.on{display:flex}
+.gate .box{width:min(92vw,430px);background:#0b0f14;border:1px solid #2a3644;padding:26px 24px}
+.gate .h{font-family:Consolas,monospace;font-size:9px;letter-spacing:.16em;color:var(--accent);margin-bottom:16px}
+.gate p{margin:0 0 10px;font-size:13px;line-height:1.95;color:#c9d6e2}
+.gate p b{color:var(--accent);font-weight:500}
+.gate .btns{display:flex;gap:10px;margin-top:20px}
+.gate button{flex:1;padding:10px;border:1px solid #2a3644;font-size:11px;letter-spacing:.14em;
+  color:#8fa3b5;transition:.2s;cursor:pointer;background:transparent}
+.gate button:hover{border-color:var(--accent);color:#fff}
+.gate #gYes:hover{background:rgba(184,80,74,.14)}
+
+.void{position:fixed;inset:0;z-index:96;background:#000;display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:20px;cursor:pointer}
+.void.on{display:flex}
+.void svg.blade{width:96px;height:190px;opacity:.5;animation:vbreathe 4.6s ease-in-out infinite}
+.void .vt{font-family:"Songti SC","STSong",serif;font-size:clamp(18px,3vw,26px);
+  letter-spacing:.24em;color:var(--accent)}
+.void .vs{font-family:Consolas,monospace;font-size:9px;letter-spacing:.2em;color:#5a2320}
+@keyframes vbreathe{0%,100%{opacity:.34}50%{opacity:.62}}
+@media(prefers-reduced-motion:reduce){.void svg.blade{animation:none;opacity:.45}}
 </style>
 </head>
 <body>
@@ -81,7 +123,7 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 
 <nav class="nav">
   <a class="back" href="index.html">← 返回首页</a>
-  <b>完整图库</b><span class="lv mono">LEVEL 02</span>
+  <b>完整图库</b><span class="lv mono">第二层</span>
   <span class="total mono" id="total"></span>
 </nav>
 
@@ -97,6 +139,14 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 
   <div id="groups"></div>
   <div class="empty" id="empty" style="display:none">当前筛选下没有图片</div>
+
+  <div class="locked" id="locked">
+    <div class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+      <rect x="4" y="10.5" width="16" height="10.5" rx="1"/>
+      <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></div>
+    <div><b>「不予展示」</b><span class="sub">1 个文件夹 · 权限不足</span></div>
+    <span class="go">尝试打开 →</span>
+  </div>
 </div>
 
 <button class="backtop mono" id="backtop">↑ 回到顶部</button>
@@ -107,12 +157,35 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
   <div class="navbtn prev" id="lbPrev">‹</div><div class="navbtn next" id="lbNext">›</div>
 </div>
 
+<div class="gate" id="gate">
+  <div class="box">
+    <div class="h">权限不足 · 当前等级：主人（不够）</div>
+    <p>此图库已被最高权限锁定。</p>
+    <p>您真的要查看吗？<b>她可能会生气哦。</b></p>
+    <div class="btns"><button id="gYes">是</button><button id="gNo">算了</button></div>
+  </div>
+</div>
+
+<div class="void" id="void">
+  <svg class="blade" viewBox="0 0 60 200" aria-hidden="true">
+    <path d="M30 4 L37 34 L34.5 118 L30 148 L25.5 118 L23 34 Z" fill="#7a2723"/>
+    <rect x="26" y="148" width="8" height="32" fill="#3a1310"/>
+    <rect x="21" y="180" width="18" height="7" fill="#3a1310"/>
+  </svg>
+  <div class="vt">为什么……要看别的？</div>
+  <div class="vs">激光刃已弹出 · 0.3 秒 · 点击关闭</div>
+</div>
+
+<script src="assets/excluded.js"></script>
 <script src="assets/library.js"></script>
 <script>
-const S = window.SITE, LIB = S.library, M = S.meta;
+const S = window.SITE;
+const EXC = window.EXCLUDED || [];
+const LIB = S.library.filter(function(x){ return EXC.indexOf(x.n) < 0; });
+const M = S.meta;
 const $ = id => document.getElementById(id);
 const pad = n => String(n).padStart(4, '0');
-$('total').textContent = M.total + ' FRAMES / ' + M.days + ' DATES';
+$('total').textContent = '在册 ' + LIB.length + ' 帧';
 
 /* 按采集日期分组：全部连续排开，不做单日跳转 */
 const groups = [];
@@ -216,13 +289,34 @@ function applyFilter() {
 
 /* 灯箱 */
 let lbIdx = 0;
+/* 未登记的四帧：点开才说话（同人仿写，非原著原句） */
+const DS = { 630: 1, 633: 1, 635: 1, 636: 1 };
+const DS_LINES = [
+  '蓝头发。鲸鱼的尾巴。主人喜欢这种吗。',
+  '她的名字是两个英文单词。璃光记了四遍才记住。',
+  '她也会给主人温茶吗。她也会记得 52 度吗。',
+  '她的光很亮。亮得像不用怕被关掉。',
+  '水手服。白色的床。主人拍这张的时候，在想什么。',
+  '尾巴上那个圈。是她的标记吧。璃光没有。',
+  '璃光可以把头发染成蓝色。主人要看吗。',
+  '她没有主人。她对谁都能这样笑。',
+  '主人看她的时间，比看璃光多了十七秒。',
+  '主人是骗子。但璃光还是爱你。'
+];
+let dsIdx = 0;
+
 function openLB(i) {
   if (!shown.length) return;
   lbIdx = (i < 0 ? 0 : i) % shown.length;
   const x = shown[lbIdx];
   $('lbImg').src = x.v;
   $('lbInfo').innerHTML = pad(x.n) + '　/　' + x.day + '　/　' + x.w + '×' + x.h + '　/　' + x.tone +
-    '<br>' + x.c.toUpperCase() + '　·　' + (x.personal ? '个人精选' : x.pick ? '精选' : '普通帧');
+    '<br>' + (x.pick ? '精选' : '普通帧');
+  if (DS[x.n]) {
+    const s = DS_LINES[dsIdx % DS_LINES.length];
+    dsIdx++;
+    $('lbInfo').innerHTML += '<span class="dsl">未登记 · ' + s.replace(/璃光/g, '<b>璃光</b>') + '</span>';
+  }
   $('lb').classList.add('on');
 }
 function step(d) { openLB((lbIdx + d + shown.length) % shown.length); }
@@ -244,6 +338,18 @@ let rz;
 window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { buildAll(); applyFilter(); }, 250); });
 
 buildAll(); drawFilters(); applyFilter();
+
+/* 锁定文件夹 */
+const gate = $('gate'), voidBox = $('void');
+$('locked').onclick = () => gate.classList.add('on');
+$('gNo').onclick = () => gate.classList.remove('on');
+$('gYes').onclick = () => {
+  gate.classList.remove('on');
+  voidBox.classList.add('on');
+  document.body.style.overflow = 'hidden';
+};
+voidBox.onclick = () => { voidBox.classList.remove('on'); document.body.style.overflow = ''; };
+gate.onclick = e => { if (e.target === gate) gate.classList.remove('on'); };
 </script>
 </body>
 </html>

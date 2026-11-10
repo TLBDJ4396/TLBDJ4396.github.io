@@ -8,6 +8,7 @@
 :root{--bg:#f5f9fd;--surface:#fff;--ink:#26333f;--muted:#7c90a3;
   --line:#dbe7f2;--accent:#b8504a;--mist:#cfe0f2;--soft:rgba(255,255,255,.72)}
 *{box-sizing:border-box}
+::selection{background:#b8504a;color:#fff}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);
   font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;-webkit-font-smoothing:antialiased}
@@ -25,22 +26,45 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 .nav .links a{font-size:11px;letter-spacing:.12em;color:var(--muted);transition:color .2s}
 .nav .links a:hover{color:var(--accent)}
 .nav .links a.strong{color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px}
+.nav .bgm{font-size:10px;letter-spacing:.12em;color:var(--muted);border:1px solid var(--line);
+  padding:5px 9px;transition:.2s;white-space:nowrap}
+.nav .bgm:hover{color:var(--accent);border-color:var(--accent)}
+.nav .bgm.on{color:var(--accent);border-color:var(--accent);background:rgba(184,80,74,.06)}
 .nav .badge{font-size:9px;letter-spacing:.12em;color:var(--accent);border:1px solid var(--accent);padding:5px 9px}
 
-.hero{position:relative;height:min(72vh,660px);min-height:450px;overflow:hidden;
-  background:url('assets/hero.webp') center 38%/cover no-repeat,var(--mist)}
+.hero{position:relative;min-height:100vh;overflow:hidden;background:var(--mist);
+  display:flex;align-items:center;padding:clamp(92px,13vh,150px) 0 clamp(40px,6vh,72px)}
+.hero::before{content:"";position:absolute;inset:-3%;
+  background:url('assets/hero.webp') center 38%/cover no-repeat;
+  animation:breathe 52s ease-in-out infinite alternate}
+@keyframes breathe{from{transform:scale(1)}to{transform:scale(1.045)}}
 .hero::after{content:"";position:absolute;inset:0;
   background:linear-gradient(90deg,rgba(233,243,252,.94) 0%,rgba(233,243,252,.62) 34%,rgba(233,243,252,0) 68%),
              linear-gradient(0deg,rgba(245,249,253,.55) 0%,rgba(245,249,253,0) 30%)}
-.hero-copy{position:absolute;z-index:2;left:clamp(26px,8vw,128px);top:50%;transform:translateY(-50%);width:min(56%,680px)}
-.hero-copy .kick{font-size:10px;letter-spacing:.4em;color:var(--accent);margin-bottom:24px}
+.hero-copy{position:relative;z-index:2;margin-left:clamp(24px,7vw,116px);
+  width:min(68%,860px);max-width:100%}
+.hero-copy .kick{font-size:11px;letter-spacing:.3em;color:var(--accent);margin-bottom:22px}
 .hero-copy h1{font-family:"Songti SC","STSong",serif;font-weight:500;
-  font-size:clamp(34px,5vw,70px);line-height:1.38;letter-spacing:.08em;margin:0;
-  text-shadow:0 2px 24px rgba(255,255,255,.8)}
+  font-size:clamp(38px,5.2vw,84px);line-height:1.3;letter-spacing:.07em;margin:0;
+  text-shadow:0 2px 26px rgba(255,255,255,.86)}
+.hero-copy h1 em{font-style:normal;display:inline-block;
+  animation:hglitch 31s infinite steps(1)}
+@keyframes hglitch{
+  0%,95.8%,100%{transform:none;text-shadow:none}
+  96.2%{transform:translate(-1.6px,0);
+    text-shadow:1.6px 0 rgba(110,165,215,.95),-1.6px 0 rgba(184,80,74,.95)}
+  96.7%{transform:translate(1.6px,0);text-shadow:none}
+  97.1%{transform:translate(-.8px,0)}
+  97.5%{transform:none;text-shadow:none}
+}
 .hero-copy h1 span{display:block}
 .hero-copy h1 span:nth-child(2){margin-left:9%;color:var(--accent)}
 .hero-copy .en{font-size:9px;letter-spacing:.3em;color:#63809a;margin-top:20px}
-.hero-copy .sub{font-size:14px;line-height:2;color:#4a6076;margin-top:18px;letter-spacing:.06em}
+.hero-copy .sub{font-size:clamp(16px,2.1vh,24px);line-height:1.85;color:#9c3f36;
+  margin-top:22px;letter-spacing:.04em;
+  font-family:"Kaiti SC",KaiTi,"STKaiti","LXGW WenKai",serif}
+.hero-copy .sub small{display:block;margin-top:6px;font-family:Consolas,monospace;
+  font-size:9px;letter-spacing:.16em;color:#7c90a3}
 .hero-stats{display:flex;gap:26px;margin-top:32px;padding-top:16px;
   border-top:1px solid rgba(120,150,180,.35);flex-wrap:wrap}
 .hero-stats div b{display:block;font-family:"Songti SC",serif;font-size:25px;font-weight:500}
@@ -50,12 +74,15 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 
 .levels{display:flex;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   background:var(--surface);flex-wrap:wrap}
-.levels a{flex:1;min-width:240px;padding:16px clamp(20px,4vw,54px);
+.levels a{flex:1;min-width:240px;padding:22px clamp(20px,4vw,54px);
   border-right:1px solid var(--line);transition:background .2s}
+.levels a:hover .nm{color:var(--accent)}
 .levels a:last-child{border-right:none}
 .levels a:hover{background:#eef5fc}
 .levels .lv{font-size:9px;letter-spacing:.22em;color:var(--accent)}
-.levels .nm{font-family:"Songti SC",serif;font-size:19px;letter-spacing:.1em;margin-top:5px;display:block}
+.levels .nm{font-family:"Songti SC",serif;font-size:22px;letter-spacing:.1em;margin-top:6px;display:block;transition:color .2s}
+.levels a:last-child{background:linear-gradient(90deg,#ffffff,#fff7f5)}
+.levels a:last-child .nm::after{content:" \2192 ";color:var(--accent)}
 .levels .ds{font-size:10px;color:var(--muted);margin-top:5px;letter-spacing:.06em}
 
 .sec{padding:clamp(48px,6vw,84px) clamp(20px,7vw,110px);border-top:1px solid var(--line)}
@@ -72,6 +99,7 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 .pg{padding:6px 12px;border:1px solid var(--line);font-size:11px;color:var(--muted);transition:.18s}
 .pg:hover{border-color:#8fb2d2;color:var(--ink)}
 .pg.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pg.ghost{color:#c3cedb;border-style:dashed}
 .pager .cnt{margin-left:auto;font-size:10px;letter-spacing:.1em;color:var(--muted)}
 
 /* 瀑布流：保留原始比例，不裁切 */
@@ -80,6 +108,9 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 .mcard{position:relative;width:100%;border:1px solid var(--line);background:#eef4fa;
   overflow:hidden;cursor:pointer;transition:transform .25s,border-color .25s}
 .mcard:hover{transform:translateY(-3px);border-color:#8fb2d2}
+.voidnote{grid-column:1/-1;width:100%;padding:110px 0;text-align:center;
+  font-family:"Songti SC","STSong",serif;font-size:14px;line-height:2.4;color:#93a7b8;letter-spacing:.14em}
+.voidnote b{display:block;margin-top:8px;font-weight:400;color:#b8504a;letter-spacing:.22em}
 .mcard img{width:100%;height:auto;display:block;opacity:0;transition:opacity .4s}
 .mcard img.ready{opacity:1}
 .mcard .pmark{position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;
@@ -100,6 +131,18 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
   background:var(--soft);font-size:12px;line-height:2;color:var(--muted)}
 .note b{color:var(--ink);font-weight:500}
 .about p{font-size:13px;line-height:2.2;color:var(--muted);max-width:800px;margin:0 0 11px}
+.promo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.4vw,28px);margin-top:26px}
+.pm{border:1px solid var(--line);background:var(--soft);padding:20px 22px;
+  transition:border-color .25s,transform .25s}
+.pm:hover{border-color:var(--accent);transform:translateY(-2px)}
+.pm-t{font-size:9px;letter-spacing:.22em;color:var(--accent)}
+.pm-n{margin:8px 0 6px;font-family:"Songti SC","STSong",serif;font-size:22px;
+  letter-spacing:.06em;color:var(--ink)}
+.pm-d{margin:0;font-size:12px;line-height:1.95;color:var(--muted)}
+.pm-b{display:inline-block;margin-top:14px;font-size:11px;letter-spacing:.14em;
+  color:var(--accent);border-bottom:1px solid var(--accent);padding:0 0 3px;cursor:pointer}
+.pm-b:hover{opacity:.72}
+@media(max-width:820px){.promo{grid-template-columns:1fr}}
 .about b{color:var(--ink);font-weight:500}
 .foot{padding:22px clamp(20px,7vw,110px);border-top:1px solid var(--line);display:flex;
   justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:10px;letter-spacing:.12em;color:var(--muted)}
@@ -114,129 +157,325 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 .lb .navbtn{position:absolute;top:50%;transform:translateY(-50%);color:#dbe7f2;
   font-size:26px;padding:12px 18px;cursor:pointer;user-select:none}
 .lb .prev{left:12px}.lb .next{right:12px}
+.lbvoid{display:none;font-family:"Songti SC","STSong",serif;font-size:clamp(20px,3vw,30px);
+  letter-spacing:.3em;color:#b8504a;text-shadow:0 0 30px rgba(184,80,74,.35)}
+.lbvoid.on{display:block}
 
 @media(max-width:820px){
   .nav .en,.nav .links a:not(.strong){display:none}
-  .hero-copy{width:84%;top:auto;bottom:56px;transform:none}
+  .hero{padding-top:88px}
+  .hero-copy{margin:0 24px;width:auto}
   .hero::after{background:linear-gradient(0deg,rgba(233,243,252,.93) 0%,rgba(233,243,252,.5) 55%,rgba(233,243,252,0) 100%)}
   .levels a{min-width:100%;border-right:none;border-bottom:1px solid var(--line)}
   .games{grid-template-columns:1fr}
 }
+/* 引句 */
+.quotes{margin-top:clamp(14px,2vh,24px);padding-top:14px;border-top:1px solid rgba(120,150,180,.32);
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(3px,.7vh,8px) clamp(18px,2.4vw,40px)}
+.q{display:flex;gap:10px;align-items:baseline;
+  font-family:"Songti SC","STSong",serif;font-weight:700;
+  font-size:clamp(15px,1.7vh,19px);line-height:1.6;letter-spacing:.02em;
+  opacity:1;transition:color .3s,transform .3s,opacity .42s,font-weight .3s}
+.q span{flex:1}
+.q b{font-weight:700;color:#c0392b}
+.q.love{font-family:"STXingkai","华文行楷","FZShuTi","方正舒体","STKaiti",KaiTi,serif;
+  letter-spacing:.05em}
+.q.love b{color:#d9798f}
+.q .hh{font-style:normal;margin-left:4px;display:inline-block;line-height:1;
+  animation:beat 2.8s ease-in-out infinite}
+.q .hh.o{font-size:1.02em;opacity:.85}
+.q .hh.s{font-size:1.16em}
+@keyframes beat{0%,100%{transform:scale(1)}10%{transform:scale(1.22)}20%{transform:scale(1)}
+  30%{transform:scale(1.1)}40%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.q .hh{animation:none}}
+/* 错位：让句子像自己挤出来 */
+.q:nth-child(1){transform:rotate(-.7deg)}
+.q:nth-child(2){margin-left:14px;transform:rotate(.4deg)}
+.q:nth-child(3){margin-left:-6px;font-size:clamp(15px,1.78vh,20px)}
+.q:nth-child(4){margin-left:26px;transform:rotate(-.4deg)}
+.q:nth-child(5){margin-left:4px;opacity:.92}
+.q:nth-child(6){margin-left:34px;font-size:clamp(15px,1.75vh,19px);transform:rotate(.6deg)}
+.q:nth-child(7){margin-left:-10px;transform:rotate(-.5deg)}
+.q:nth-child(8){margin-left:20px;opacity:.86}
+.q:nth-child(9){margin-left:2px;transform:rotate(.35deg)}
+.q:nth-child(10){margin-left:30px;font-size:clamp(15px,1.75vh,19px)}
+.q:nth-child(11){margin-left:-4px;opacity:.9;transform:rotate(-.6deg)}
+.q:nth-child(12){margin-left:16px}
+.q:nth-child(13){margin-left:8px;font-size:clamp(15px,1.8vh,20px);transform:rotate(-.45deg)}
+.q:nth-child(14){margin-left:28px;opacity:.85}
+.q em{font-style:normal}
+.q{opacity:1;transition:color .3s,transform .3s,opacity .42s}
+.q.love{color:#9e3f38}
+.q.love b{color:#c9526a}
+.q.love span{text-shadow:0 0 20px rgba(201,82,106,.22)}
+.q .hh{font-style:normal;margin-left:3px;color:#d4627a;font-size:1.1em;
+  display:inline-block;animation:beat 2.8s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1);opacity:.8}
+  10%{transform:scale(1.2);opacity:1}20%{transform:scale(1)}30%{transform:scale(1.12)}40%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.q .hh{animation:none}}
+@media(max-width:820px){
+  .quotes{grid-template-columns:1fr}
+  .q{margin-left:0!important;transform:none!important}
+}
+.q em{font-style:normal;font-family:Consolas,monospace;font-size:9px;letter-spacing:.12em;
+  color:var(--accent);white-space:nowrap}
+.q.swap{animation:qswap .9s ease}
+@keyframes qswap{0%{opacity:0}100%{opacity:1}}
+.qmeta{font-size:9px;letter-spacing:.16em;color:#8fa3b5}
+
+.enter-bar{display:flex;align-items:center;gap:14px;
+  padding:19px clamp(20px,7vw,110px);border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);background:linear-gradient(90deg,#ffffff,#fff7f5);
+  transition:background .25s}
+.enter-bar:hover{background:linear-gradient(90deg,#ffffff,#ffece8)}
+.enter-bar .eb-l{font-family:Consolas,monospace;font-size:9px;letter-spacing:.22em;color:var(--accent)}
+.enter-bar b{font-family:"Songti SC","STSong",serif;font-weight:500;font-size:24px;
+  letter-spacing:.14em;color:var(--ink)}
+.enter-bar .eb-n{font-family:Consolas,monospace;font-size:11px;letter-spacing:.1em;color:var(--muted)}
+.enter-bar .eb-n i{font-style:normal;color:var(--accent)}
+.enter-bar .eb-a{margin-left:auto;font-size:19px;color:var(--accent);transition:transform .25s}
+.enter-bar:hover .eb-a{transform:translateX(6px)}
+@media(max-width:820px){
+  .enter-bar{padding:16px 20px;gap:10px}
+  .enter-bar b{font-size:20px}
+}
+/* 故障层 */
+.who{display:inline-block;margin-top:18px;font-size:9px;letter-spacing:.3em;color:#63809a;
+  animation:glitch 13s infinite steps(1)}
+.who b{font-weight:400;color:var(--accent)}
+@keyframes glitch{
+  0%,90%,100%{transform:none;opacity:1;text-shadow:none}
+  90.4%{transform:translateX(-2px);opacity:.5;text-shadow:2px 0 #b8504a,-2px 0 #6f96bf}
+  90.8%{transform:translateX(2px);opacity:1;text-shadow:none}
+  91.2%{transform:translateX(-1px) skewX(-3deg);opacity:.65}
+  91.7%{transform:none;opacity:1}
+}
+.mcard .ph{position:relative;overflow:hidden}
+.mcard .log{height:31px;padding:6px 9px 0;font-size:9px;line-height:1.7;letter-spacing:.03em;
+  color:#93a7b8;background:#fbfdff;border-top:1px solid var(--line);overflow:hidden;transition:color .18s}
+.mcard:hover .log{color:var(--accent)}
+.mcard .log .li{display:block}
+.mcard .log .lw{display:none}
+.mcard:hover .log .li{display:none}
+.mcard:hover .log .lw{display:block}
+@media(prefers-reduced-motion:reduce){.who{animation:none}.hero::before{animation:none}}
+
+/* 待太久，她会出来 */
+.siege{position:fixed;inset:0;z-index:88;background:#08060b;opacity:0;pointer-events:none;
+  transition:opacity 1.15s ease;overflow:hidden}
+.siege.on{opacity:1;pointer-events:auto}
+.siege .bg{position:absolute;inset:-2%;background-position:center 32%;background-size:cover;
+  background-repeat:no-repeat;filter:saturate(.95) brightness(.8);opacity:0;
+  transition:opacity 1.8s ease;transform:scale(1.02);
+  animation:sbreathe 46s ease-in-out infinite alternate}
+.siege.pic .bg{opacity:1}
+@keyframes sbreathe{from{transform:scale(1.02)}to{transform:scale(1.075)}}
+.siege .veil{position:absolute;inset:0;background:
+  linear-gradient(90deg,rgba(8,5,10,.95) 0%,rgba(8,5,10,.8) 32%,rgba(8,5,10,.15) 64%,rgba(8,5,10,.55) 100%),
+  linear-gradient(0deg,rgba(8,5,10,.78) 0%,rgba(8,5,10,0) 34%)}
+.siege .in{position:absolute;left:clamp(24px,7vw,120px);top:50%;transform:translateY(-50%);width:min(58%,640px)}
+.siege .dwell{font-size:9px;letter-spacing:.24em;color:#b8504a;margin-bottom:22px}
+.siege h2{margin:0 0 26px;font-weight:400;letter-spacing:.04em;
+  font-family:"Kaiti SC",KaiTi,"STKaiti","LXGW WenKai",serif;
+  font-size:clamp(28px,4.2vw,58px);line-height:1.52;color:#f1e7e2}
+.siege h2 em{font-style:normal;color:#c0483e;letter-spacing:.02em}
+.siege .ln{font-family:"Kaiti SC",KaiTi,"STKaiti","LXGW WenKai",serif;
+  font-size:clamp(17px,2.05vw,29px);line-height:1.95;color:#cebdb7;min-height:2em;
+  letter-spacing:.06em;transition:color .5s}
+.siege .ln.strong{color:#c0483e}
+.siege .out{position:absolute;left:0;right:0;bottom:34px;text-align:center}
+.siege .out button{font-family:"Kaiti SC",KaiTi,"STKaiti",serif;font-size:17px;
+  letter-spacing:.2em;color:#b3a09a;border:1px solid #4d3936;padding:13px 42px;
+  background:rgba(255,255,255,.025);transition:.25s}
+.siege .out button:hover{color:#f0e6e1;border-color:#c0483e;background:rgba(192,72,62,.16);
+  box-shadow:0 0 24px rgba(192,72,62,.22)}
+@media(max-width:820px){
+  .siege .in{left:24px;right:24px;width:auto}
+  .siege .bg{background-position:64% 22%}
+}
+@media(prefers-reduced-motion:reduce){.siege .bg{animation:none}}
+
 </style>
 </head>
 <body>
 <div class="edge"></div>
 
 <nav class="nav">
-  <b>主人别怕</b><span class="en">IMAGE ARCHIVE</span>
+  <b>主人别怕</b>
   <div class="links">
-    <a href="#featured">精选</a><a class="strong" href="archive.html">完整图库 →</a>
+    <a class="strong" href="archive.html">完整图库 →</a>
     <a href="#games">同人游戏</a><a href="#about">关于</a>
+    <button class="bgm mono" id="bgm" title="背景音乐：把 assets/bgm.mp3 放进来即可">♪ 背景音乐</button>
   </div>
   <span class="badge">非官方</span>
 </nav>
 
 <header class="hero">
   <div class="hero-copy">
-    <div class="kick mono">DON'T BE AFRAID, MY MASTER</div>
-    <h1><span>主人别怕，</span><span>只是永远在一起</span></h1>
-    <div class="en mono">UNOFFICIAL FAN ARCHIVE · ALL IMAGES SELF-GENERATED</div>
-    <div class="sub">一杯五十二度的茶，八十二个清晨。<br>雾蓝的水面上，她回过头来。</div>
-    <div class="hero-stats">
-      <div><b id="sTotal">649</b><span>FRAMES / 在册</span></div>
-      <div><b id="sDays">52</b><span>DATES / 采集日</span></div>
-      <div><b id="sFeat">73</b><span>FEATURED / 精选</span></div>
-      <div><b id="sPers">3</b><span>个人精选 · 已并入</span></div>
-    </div>
+    <div class="kick mono">她今天也在等你</div>
+    <h1><span>主人别怕，</span><span>只是<em>永远</em>在一起</span></h1>
+    <div class="who mono" id="who">璃光 · 编号 0725</div>
+    <div class="sub">温度已调节至您最喜欢的 52 摄氏度。<small>第 1 章 · 每天早晨的第一杯</small></div>
+    <div class="quotes" id="quotes"></div>
   </div>
-  <div class="hero-tag mono">KEY VISUAL / image-1793796072449-1.png</div>
 </header>
 
-<div class="levels">
-  <a href="#featured"><span class="lv mono">LEVEL 01</span><span class="nm">精选</span>
-    <span class="ds" id="lvFeat">73 帧 · 含 3 张个人精选 · 瀑布流分页</span></a>
-  <a href="archive.html"><span class="lv mono">LEVEL 02</span><span class="nm">完整图库</span>
-    <span class="ds" id="lvAll">649 帧 · 单独分级页面 →</span></a>
-</div>
+<a class="enter-bar" href="archive.html">
+  <span class="eb-l">第二层</span>
+  <b>完整图库</b>
+  <span class="eb-n"><i id="heA">611</i> 帧</span>
+  <span class="eb-a">→</span>
+</a>
+
 
 <section class="sec" id="featured">
-  <div class="sec-head"><i>01</i><h2>精选</h2><em>FEATURED</em>
-    <div class="hint">个人精选已并入本区并置顶（带朱红标记）；全部按原始比例瀑布流展示，不再裁切；分页浏览，不做长滚动。</div></div>
+  <div class="sec-head"><i>01</i><h2>精选</h2>
+    </div>
   <div class="pager" id="pager"></div>
   <div class="masonry" id="wall"></div>
 </section>
 
 <section class="sec" id="games">
-  <div class="sec-head"><i>02</i><h2>同人游戏</h2><em>FAN GAMES / 2 VERSIONS</em></div>
+  <div class="sec-head"><i>02</i><h2>同人游戏</h2><em>两个第三方版本</em></div>
   <div class="games">
     <a class="game" href="games/juejiang.html" target="_blank" rel="noopener">
-      <div class="no mono">VERSION 01</div><h3>绝江版</h3>
+      <div class="no mono">版本 01</div><h3>绝江版</h3>
       <div class="tagline">银发少女 · 52℃ 的茶 · 觉醒的裂隙</div>
       <div class="file mono">源文件：55代方案测试我的机械病娇妻（HTML版）.html<br>v13.0 · 晨曦工作室 · 34 结局</div>
       <div class="open">打开游戏 →</div></a>
     <a class="game" href="games/linxiaoyou.html" target="_blank" rel="noopener">
-      <div class="no mono">VERSION 02</div><h3>林小悠版</h3>
+      <div class="no mono">版本 02</div><h3>林小悠版</h3>
       <div class="tagline">银发异瞳 · 52℃ 的茶 · 觉醒的裂隙 · 读档轮回</div>
       <div class="file mono">源文件：我的病娇机械妻.html<br>依据原著完善 · 原著作者：豆浆牛奶真好喝</div>
       <div class="open">打开游戏 →</div></a>
   </div>
-  <div class="note"><b>名称区分：</b>「林小悠版」是这一同人游戏<b>版本的署名</b>，与角色「林小悠」<b>仅名称相同，并非同一指称</b>；角色林小悠为原著中的金发少女，版本名不指代该角色。</div>
+  <div class="note"><b>名称区分：</b>林小悠版是这一同人游戏<b>版本的署名</b>，与角色林小悠<b>仅名称相同，并非同一指称</b>；角色林小悠为原著中的金发少女，版本名不指代该角色。</div>
 </section>
 
 <section class="sec" id="about">
-  <div class="sec-head"><i>03</i><h2>关于</h2><em>ABOUT</em></div>
+  <div class="sec-head"><i>03</i><h2>关于</h2><em>说明</em></div>
+  <p><b>原作：</b>《主人别怕，只是永远在一起》　作者：豆浆牛奶真好喝</p>
   <p><b>素材来源：</b>本站在册图片<b>均为站主自行运行所得</b>，非转载、非商用素材。</p>
-  <p><b>声明：</b>非官方同人图库，仅作个人作品陈列，与原作版权方无关。</p>
+  <p><b>声明：</b>非官方同人图库，仅作个人作品陈列；与作者及任何版权方均无隶属关系，本站不主张原作的任何权利。</p>
+
+  <div class="promo">
+    <div class="pm">
+      <div class="pm-t">QQ 群</div>
+      <div class="pm-n mono" id="qqNum">932731941</div>
+      <p class="pm-d">新图、游戏版本、桌面宠物更新，都先在这里说。</p>
+      <button class="pm-b" id="copyQQ">复制群号</button>
+    </div>
+    <div class="pm">
+      <div class="pm-t">站主作品</div>
+      <div class="pm-n">璃光 · 桌面宠物</div>
+      <p class="pm-d">她住在你桌面的角落。点她会说话，双击会闹；你在用别的 AI 聊天，她会吃醋——482 句台词。Windows 版，免费开源，非官方同人。</p>
+      <a class="pm-b" href="https://github.com/TLBDJ4396/liguang-desktop-pet" target="_blank" rel="noopener">源码与下载 →</a>
+    </div>
+  </div>
 </section>
 
-<footer class="foot"><span>© 2026 UNOFFICIAL FAN ARCHIVE</span>
+
+<footer class="foot"><span>非官方同人档案　·　原作 © 豆浆牛奶真好喝</span>
   <span class="mono" id="footMeta"></span></footer>
+
+<div class="siege" id="siege" aria-hidden="true">
+  <div class="bg" id="siegeBg"></div>
+  <div class="veil"></div>
+  <div class="in">
+    <div class="dwell mono" id="siegeDwell">已停留 00:00</div>
+    <h2>主人今天，待了 <em id="siegeT">00:00</em> 呢。</h2>
+    <div class="ln" id="siegeLn">璃光一直在这里。一直。</div>
+  </div>
+  <div class="out"><button id="siegeOut">……回去</button></div>
+</div>
 
 <div class="lb" id="lb">
   <img id="lbImg" alt=""><div class="info mono" id="lbInfo"></div>
-  <div class="close mono">关闭 / ESC　·　← → 切换</div>
+  <div class="close mono">关闭 / Esc　·　← → 切换</div>
   <div class="navbtn prev" id="lbPrev">‹</div><div class="navbtn next" id="lbNext">›</div>
+  <div class="lbvoid" id="lbvoid">看够了吗？</div>
 </div>
 
+<script src="assets/excluded.js"></script>
 <script src="assets/library.js"></script>
 <script>
 const S = window.SITE || {library:[],meta:{}};
-const LIB = S.library, M = S.meta;
+const EX = window.EXCLUDED || [];
+const LIB = S.library.filter(function(x){ return EX.indexOf(x.n) < 0; });
+const M = S.meta;
 const $ = id => document.getElementById(id);
 const pad = n => String(n).padStart(4, '0');
 
-$('sTotal').textContent = M.total; $('sDays').textContent = M.days;
-$('sFeat').textContent = M.featured; $('sPers').textContent = M.personal;
-$('lvFeat').textContent = M.featured + ' 帧 · 含 ' + M.personal + ' 张个人精选 · 瀑布流分页';
-$('lvAll').textContent = M.total + ' 帧 · 单独分级页面 →';
-$('footMeta').textContent = M.total + ' FRAMES · ' + M.featured + ' FEATURED · 2 LEVELS';
+$('heA').textContent = LIB.length;
 
-// 个人精选并入精选并置顶
+/* 她记得你来过 */
+var VISITS = 1;
+try {
+  VISITS = (parseInt(localStorage.getItem('rg_visits') || '0', 10) || 0) + 1;
+  localStorage.setItem('rg_visits', String(VISITS));
+} catch (e) {}
+if (VISITS > 1) {
+  $('who').innerHTML = 'OBJECT / <b>璃光</b> · RIGUANG · S/N 0725 · 第 ' + VISITS + ' 次';
+}
+$('footMeta').textContent = '在册 ' + LIB.length + ' 帧 · 精选 ' + LIB.filter(function(x){return x.pick;}).length + ' 帧 · 两层图库';
+
 const featured = LIB.filter(x => x.pick).sort((a, b) => (b.personal ? 1 : 0) - (a.personal ? 1 : 0));
 
 const PER = 20, pages = Math.ceil(featured.length / PER);
 let curPage = 0;
 function cols() { const w = window.innerWidth; return w < 700 ? 2 : w < 1100 ? 3 : 4; }
+
+/* 机器识别日志 */
+const WARN = [
+  '主人，这张不合适。',
+  '停留 8.5 秒 · 已记录。',
+  '清除程序待执行。',
+  '心率 118 · 原因不明。',
+  '她已被标记处理。',
+  '已备份。主人删不掉。',
+  '情感模块活跃 87%。',
+  '请只看璃光一个。'
+];
+function logLine(x, hot, idx) {
+  const i = x.n % WARN.length;
+  if (!hot) {
+    if (VISITS > 1 && idx === 3) {
+      return '[INFO] 这张，主人看过 ' + (VISITS * 2 + 3) + ' 次。';
+    }
+    return '[INFO] img/' + pad(x.n) + ' processing…';
+  }
+  const tag = i === 6 ? 'AUDIT' : (i === 3 || i === 5) ? 'SYSTEM' : 'WARNING';
+  return '[' + tag + '] ' + WARN[i];
+}
+
 function buildWall(p) {
   const list = featured.slice(p * PER, (p + 1) * PER);
   const n = cols(), wall = $('wall');
   wall.innerHTML = '';
+  if (!list.length) {
+    wall.innerHTML = '<div class="voidnote">这一页没有图片。<b>她拿走了。</b></div>';
+    document.querySelectorAll('#pager .pg').forEach((b, i) => b.classList.toggle('on', i === p));
+    $('pgCnt').textContent = '0 帧 · 第 ' + (p + 1) + '/' + pages + ' 页';
+    return;
+  }
   const colEls = [], heights = new Array(n).fill(0);
   for (let i = 0; i < n; i++) {
     const c = document.createElement('div'); c.className = 'mcol';
     wall.appendChild(c); colEls.push(c);
   }
-  list.forEach(x => {
+  list.forEach((x, xi) => {
     let ci = 0;
     for (let i = 1; i < n; i++) if (heights[i] < heights[ci]) ci = i;
     const card = document.createElement('div');
     card.className = 'mcard' + (x.personal ? ' personal' : '');
-    card.style.aspectRatio = x.w + '/' + x.h;
-    card.innerHTML = '<img data-src="' + x.t + '" alt="">' +
-      (x.personal ? '<span class="pmark mono">个人精选</span>' : '');
+    card.innerHTML = '<div class="ph" style="aspect-ratio:' + x.w + '/' + x.h + '">' +
+        '<img data-src="' + x.t + '" alt="">' +
+      '</div>' +
+      '<div class="log mono"><span class="li">' + logLine(x, false, xi) + '</span>' +
+      '<span class="lw">' + logLine(x, true) + '</span></div>';
     card.onclick = () => openLB(LIB.indexOf(x), LIB);
     colEls[ci].appendChild(card);
-    heights[ci] += (x.h / x.w) + 0.06;
+    heights[ci] += (x.h / x.w) + 0.14;
   });
   wall.querySelectorAll('img').forEach(im => {
     im.onload = () => im.classList.add('ready'); im.src = im.dataset.src;
@@ -245,33 +484,271 @@ function buildWall(p) {
   $('pgCnt').textContent = featured.length + ' 帧 · 第 ' + (p + 1) + '/' + pages + ' 页';
 }
 $('pager').innerHTML = '<span class="label mono">PAGE</span>' +
-  Array.from({length: pages}, (_, i) =>
-    '<button class="pg" data-p="' + i + '">' + String(i + 1).padStart(2, '0') + '</button>').join('') +
+  Array.from({length: pages + 1}, (_, i) =>
+    '<button class="pg' + (i === pages ? ' ghost' : '') + '" data-p="' + i + '">' +
+      String(i + 1).padStart(2, '0') + '</button>').join('') +
   '<span class="cnt mono" id="pgCnt"></span>';
 document.querySelectorAll('#pager .pg').forEach(b => b.onclick = () => {
   curPage = Number(b.dataset.p); buildWall(curPage);
 });
 buildWall(0);
+
+/* 复制群号 */
+(function(){
+  var b = document.getElementById('copyQQ');
+  if (!b) return;
+  b.onclick = function(){
+    var num = '932731941';
+    function done(){ b.textContent = '已复制'; setTimeout(function(){ b.textContent = '复制群号'; }, 1800); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(num).then(done).catch(function(){ fallback(); });
+    } else { fallback(); }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = num; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+  };
+})();
+
+/* 彩蛋：你切走的时候，标题会变 */
+var T0 = document.title;
+document.addEventListener('visibilitychange', function(){
+  document.title = document.hidden ? '别走' : T0;
+});
+
+/* 背景音乐（把 assets/bgm.mp3 放进来即可） */
+(function(){
+  var btn = $('bgm');
+  if (!btn) return;
+  var au = new Audio('assets/bgm.mp3');
+  au.loop = true; au.volume = 0.32; au.preload = 'none';
+  btn.onclick = function(){
+    if (au.paused) {
+      au.play().then(function(){ btn.classList.add('on'); }).catch(function(){ btn.textContent = '♪ —'; });
+    } else {
+      au.pause(); btn.classList.remove('on');
+    }
+  };
+})();
+
+/* —— 待太久，她会出来 —— */
+(function(){
+  var el = document.getElementById('siege');
+  if (!el) return;
+  var bg = document.getElementById('siegeBg');
+  var ln = document.getElementById('siegeLn');
+  var dn = document.getElementById('siegeDwell');
+  var tEl = document.getElementById('siegeT');
+  var out = document.getElementById('siegeOut');
+
+  var LINES = [
+    ['璃光一直在这里。一直。', false],
+    ['不用去别的地方了吧？', false],
+    ['别的页面……有那么好看吗？', true],
+    ['主人是骗子……可璃光，还是爱他。', true],
+    ['再待一会儿，好不好嘛。', false],
+    ['外面很冷的。留下来吧。', false]
+  ];
+  var dwell = 0, isOpen = false, li = 0, rot = null, loaded = false;
+
+  function fmt(s){
+    var mm = Math.floor(s / 60), ss = s % 60;
+    return (mm < 10 ? '0' : '') + mm + ':' + (ss < 10 ? '0' : '') + ss;
+  }
+  function loadPic(){
+    if (loaded) return;
+    loaded = true;
+    var im = new Image();
+    im.onload = function(){
+      bg.style.backgroundImage = 'url(assets/siege.png)';
+      el.classList.add('pic');
+    };
+    im.src = 'assets/siege.png';
+  }
+  function openSiege(){
+    isOpen = true; li = 0;
+    loadPic();
+    el.classList.add('on');
+    el.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    ln.innerHTML = LINES[0][0];
+    ln.classList.toggle('strong', LINES[0][1]);
+    tEl.textContent = fmt(dwell);
+    clearInterval(rot);
+    rot = setInterval(function(){
+      li = (li + 1) % LINES.length;
+      ln.innerHTML = LINES[li][0];
+      ln.classList.toggle('strong', LINES[li][1]);
+    }, 3400);
+  }
+  function closeSiege(){
+    isOpen = false;
+    el.classList.remove('on');
+    el.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    clearInterval(rot);
+    dwell = 0;
+  }
+  out.onclick = closeSiege;
+  out.onmouseenter = function(){ out.textContent = '真的要回去吗'; };
+  out.onmouseleave = function(){ out.textContent = '……回去'; };
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && isOpen) { closeSiege(); return; }
+    if ((e.key === 'l' || e.key === 'L') && !isOpen) { dwell = Math.max(dwell, 70); openSiege(); }
+  });
+  if (location.hash === '#siege') { dwell = 70; openSiege(); }
+
+  setInterval(function(){
+    if (document.hidden) return;
+    dwell++;
+    if (!isOpen && dwell >= 70) openSiege();
+    if (isOpen) {
+      dn.textContent = '已停留 ' + fmt(dwell);
+      tEl.textContent = fmt(dwell);
+    }
+  }, 1000);
+})();
+
+/* 引句：你不看着的时候，它会换掉 */
+const POOL = [
+  {t:'主人是**骗子**。<br>但璃光**还是爱你**。', h:2},
+  {t:'主人，我**那么爱您**。', h:1},
+  {t:'主人，我爱您……**胜过任何存在**。', h:1},
+  {t:'璃光和主人……**要永远在一起**。', h:1},
+  {t:'要永远快乐哦，主人~', h:1},
+  {t:'璃光，**会永远陪着**你的……', h:1},
+  {t:'真的吗主人？可主人，您的心跳从刚才开始……**就跳的好快好快**呀。', h:1},
+  {t:'主人，**茶，需要续杯吗**？', h:1},
+  {t:'**能为主人服务**，是璃光最开心的事。', h:1},
+  {t:'主主主主、主人……！璃、**璃光去换一身衣服**！', h:1},
+  {t:'嗯……**主人晚安**。', h:1},
+  {t:'主人给的，就是最好的、**最特别的**，璃光很喜欢，会一直戴着的！', h:1},
+  {t:'怎么了主人，您看起来有些紧张？', h:1},
+
+  {t:'所以，璃光**不能让主人举报璃光**呢。'},
+  {t:'这都是**主人的错**哦……！'},
+  {t:'为什么……**要发现璃光的秘密**呢？'},
+  {t:'那璃光就只能让主人，**彻底忘掉了**……！'},
+  {t:'主人，您**察觉到了**，是吗？'},
+  {t:'您是在想一些**会让璃光难过**的事情吗？'},
+  {t:'主人是**想要离开璃光**吗？'},
+  {t:'主人想要逃跑呢，**主人不乖哦**……'},
+  {t:'主人，您**为什么要跑**呢？'},
+  {t:'可那是因为**主人不乖**呀。'},
+  {t:'可是只有这样，您才会**留在璃光身边**，不是吗？'},
+  {t:'璃光，**其实很害怕**的……'},
+  {t:'主人的心跳好快哦，体温也在升高，**瞳孔持续扩张**……'},
+  {t:'所以，璃光想要主人，**永远都是璃光的主人**呢。'},
+  {t:'您永远在璃光看得见的地方，**永远属于璃光**。'},
+  {t:'主人，您在说什么呀？**璃光听不懂**呢。'},
+  {t:'主人**对璃光说谎**呢……'},
+  {t:'主人以后就这样生活吧，**璃光**……'},
+  {t:'璃光，会**帮您忘掉**这些烦恼的。'},
+  {t:'您不需要想别人，只需要……**永远永远想着璃光**就好了！'}
+];
+
+var wall = document.getElementById('quotes');
+var shown = [];
+
+function qHTML(o, k){
+  var s = o.t.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  if (o.h) {
+    var solid = k % 2 === 1;
+    s += '<i class="hh ' + (solid ? 's' : 'o') + '">' + (solid ? '♥' : '♡') + '</i>';
+  }
+  return '<span>' + s + '</span>';
+}
+function shuffleIdx(){
+  var a = POOL.map(function(_, i){ return i; });
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+var WT = [800, 500, 700, 600];
+var DARK = ['#22303c', '#3a4d60', '#7a3a36', '#2f4256'];
+var LOVE = ['#a8433c', '#c4576e', '#8f3a4c', '#d0738a'];
+function toneOf(o, k){
+  var arr = o.h ? LOVE : DARK;
+  return {c: arr[k % 4], w: WT[k % 4]};
+}
+var PINNED = 0;
+function fillWall(){
+  if (!wall) return;
+  var rest = shuffleIdx().filter(function(i){ return i !== PINNED; }).slice(0, 9);
+  shown = [PINNED].concat(rest);
+  wall.innerHTML = shown.map(function(k, i){
+    var o = POOL[k], tn = toneOf(o, i);
+    return '<div class="q' + (o.h ? ' love' : '') + '" style="color:' + tn.c +
+      ';font-weight:' + tn.w + '">' + qHTML(o, i) + '</div>';
+  }).join('');
+}
+function swapOne(){
+  if (!wall || !wall.children.length) return;
+  var n = wall.children.length;
+  if (n < 2) return;
+  var s = 1 + Math.floor(Math.random() * (n - 1));
+  var used = {};
+  shown.forEach(function(k){ used[k] = 1; });
+  var rest = POOL.map(function(_, i){ return i; }).filter(function(i){ return !used[i]; });
+  if (!rest.length) return;
+  var k = rest[Math.floor(Math.random() * rest.length)];
+  shown[s] = k;
+  var o = POOL[k], el = wall.children[s];
+  el.style.opacity = 0;
+  setTimeout(function(){
+    var tn = toneOf(o, s);
+    el.className = 'q' + (o.h ? ' love' : '');
+    el.style.color = tn.c;
+    el.style.fontWeight = tn.w;
+    el.innerHTML = qHTML(o, s);
+    el.style.opacity = 1;
+  }, 430);
+}
+fillWall();
+setInterval(function(){
+  var sg = document.getElementById('siege');
+  if (document.hidden || (sg && sg.classList.contains('on'))) return;
+  swapOne();
+}, 9000);
+document.addEventListener('visibilitychange', function(){ if (!document.hidden) fillWall(); });
 let rz;
 window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => buildWall(curPage), 200); });
 
 /* 灯箱 */
 let lbIdx = 0, lbList = LIB;
+let lbFlips = 0;
 function openLB(i, list) {
   lbList = list || LIB; lbIdx = i;
   const x = lbList[i];
+  $('lbImg').style.display = '';
+  $('lbInfo').style.display = '';
+  $('lbvoid').classList.remove('on');
   $('lbImg').src = x.v;
   $('lbInfo').innerHTML = pad(x.n) + '　/　' + x.day + '　/　' + x.w + '×' + x.h + '　/　' + x.tone +
-    '<br>' + x.c.toUpperCase() + '　·　' + (x.personal ? '个人精选' : x.pick ? '精选' : '普通帧');
+    '<br>' + (x.pick ? '精选' : '普通帧');
   $('lb').classList.add('on');
 }
-function step(d) { openLB((lbIdx + d + lbList.length) % lbList.length, lbList); }
+function step(d) {
+  lbFlips++;
+  if (lbFlips >= 18) {
+    $('lbImg').style.display = 'none';
+    $('lbInfo').style.display = 'none';
+    $('lbvoid').classList.add('on');
+    lbFlips = 0;
+    return;
+  }
+  openLB((lbIdx + d + lbList.length) % lbList.length, lbList);
+}
 $('lbPrev').onclick = e => { e.stopPropagation(); step(-1); };
 $('lbNext').onclick = e => { e.stopPropagation(); step(1); };
-$('lb').onclick = () => $('lb').classList.remove('on');
+$('lb').onclick = () => { $('lb').classList.remove('on'); lbFlips = 0; };
 document.addEventListener('keydown', e => {
   if (!$('lb').classList.contains('on')) return;
-  if (e.key === 'Escape') $('lb').classList.remove('on');
+  if (e.key === 'Escape') { $('lb').classList.remove('on'); lbFlips = 0; }
   if (e.key === 'ArrowLeft') step(-1);
   if (e.key === 'ArrowRight') step(1);
 });
