@@ -379,6 +379,7 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
 
 
 <footer class="foot"><span>非官方同人档案　·　原作 © 豆浆牛奶真好喝</span>
+  <span>背景音乐：Slowly To Darkness · leberch · Pixabay</span>
   <span class="mono" id="footMeta"></span></footer>
 
 <div class="siege" id="siege" aria-hidden="true">
@@ -527,15 +528,31 @@ document.addEventListener('visibilitychange', function(){
   var btn = $('bgm');
   if (!btn) return;
   var au = new Audio('assets/bgm.mp3');
-  au.loop = true; au.volume = 0.32; au.preload = 'none';
+  au.loop = true; au.volume = 0; au.preload = 'none';
+  var fade = null;
+  function fadeIn(){
+    clearInterval(fade);
+    var v = 0;
+    fade = setInterval(function(){
+      v = Math.min(0.32, v + 0.02);
+      au.volume = v;
+      if (v >= 0.32) clearInterval(fade);
+    }, 220);
+  }
   btn.onclick = function(){
     if (au.paused) {
-      au.play().then(function(){ btn.classList.add('on'); }).catch(function(){
+      au.volume = 0;
+      au.play().then(function(){
+        btn.classList.add('on');
+        fadeIn();
+      }).catch(function(){
         btn.textContent = '♪ 未放置';
-        btn.title = '还没有音乐文件：把 mp3 放到 assets/bgm.mp3 后刷新';
+        btn.title = '音乐文件未找到：确认 assets/bgm.mp3 存在';
       });
     } else {
-      au.pause(); btn.classList.remove('on');
+      clearInterval(fade);
+      au.pause();
+      btn.classList.remove('on');
     }
   };
 })();
