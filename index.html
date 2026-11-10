@@ -265,13 +265,13 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
   transition:opacity 1.15s ease;overflow:hidden}
 .siege.on{opacity:1;pointer-events:auto}
 .siege .bg{position:absolute;inset:-2%;background-position:center 32%;background-size:cover;
-  background-repeat:no-repeat;filter:saturate(.95) brightness(.8);opacity:0;
+  background-repeat:no-repeat;filter:saturate(.98) brightness(.92);opacity:0;
   transition:opacity 1.8s ease;transform:scale(1.02);
   animation:sbreathe 46s ease-in-out infinite alternate}
 .siege.pic .bg{opacity:1}
 @keyframes sbreathe{from{transform:scale(1.02)}to{transform:scale(1.075)}}
 .siege .veil{position:absolute;inset:0;background:
-  linear-gradient(90deg,rgba(8,5,10,.95) 0%,rgba(8,5,10,.8) 32%,rgba(8,5,10,.15) 64%,rgba(8,5,10,.55) 100%),
+  linear-gradient(90deg,rgba(8,5,10,.9) 0%,rgba(8,5,10,.66) 34%,rgba(8,5,10,.06) 66%,rgba(8,5,10,.4) 100%),
   linear-gradient(0deg,rgba(8,5,10,.78) 0%,rgba(8,5,10,0) 34%)}
 .siege .in{position:absolute;left:clamp(24px,7vw,120px);top:50%;transform:translateY(-50%);width:min(58%,640px)}
 .siege .dwell{font-size:9px;letter-spacing:.24em;color:#b8504a;margin-bottom:22px}
@@ -283,6 +283,9 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
   font-size:clamp(17px,2.05vw,29px);line-height:1.95;color:#cebdb7;min-height:2em;
   letter-spacing:.06em;transition:color .5s}
 .siege .ln.strong{color:#c0483e}
+.siege .ld{margin-top:26px;font-family:Consolas,monospace;font-size:10px;
+  letter-spacing:.2em;color:#8a4a44;transition:opacity .6s}
+.siege.pic .ld{opacity:0}
 .siege .out{position:absolute;left:0;right:0;bottom:34px;text-align:center}
 .siege .out button{font-family:"Kaiti SC",KaiTi,"STKaiti",serif;font-size:17px;
   letter-spacing:.2em;color:#b3a09a;border:1px solid #4d3936;padding:13px 42px;
@@ -385,6 +388,7 @@ button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
     <div class="dwell mono" id="siegeDwell">已停留 00:00</div>
     <h2>主人今天，待了 <em id="siegeT">00:00</em> 呢。</h2>
     <div class="ln" id="siegeLn">璃光一直在这里。一直。</div>
+    <div class="ld" id="siegeLd">正在读取那一帧…</div>
   </div>
   <div class="out"><button id="siegeOut">……回去</button></div>
 </div>
@@ -526,7 +530,10 @@ document.addEventListener('visibilitychange', function(){
   au.loop = true; au.volume = 0.32; au.preload = 'none';
   btn.onclick = function(){
     if (au.paused) {
-      au.play().then(function(){ btn.classList.add('on'); }).catch(function(){ btn.textContent = '♪ —'; });
+      au.play().then(function(){ btn.classList.add('on'); }).catch(function(){
+        btn.textContent = '♪ 未放置';
+        btn.title = '还没有音乐文件：把 mp3 放到 assets/bgm.mp3 后刷新';
+      });
     } else {
       au.pause(); btn.classList.remove('on');
     }
@@ -591,6 +598,7 @@ document.addEventListener('visibilitychange', function(){
     clearInterval(rot);
     dwell = 0;
   }
+  setTimeout(loadPic, 2500);
   out.onclick = closeSiege;
   out.onmouseenter = function(){ out.textContent = '真的要回去吗'; };
   out.onmouseleave = function(){ out.textContent = '……回去'; };
